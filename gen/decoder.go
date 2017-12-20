@@ -233,7 +233,13 @@ func (g *Generator) genTypeDecoderNoCheck(t reflect.Type, out string, tags field
 			return err
 		}
 
+		if g.getType(key) == "string" {
+			fmt.Fprintln(g.out, ws+"    if key != \"__isMap\" {")
+		}
 		fmt.Fprintln(g.out, ws+"    ("+out+")[key] = "+tmpVar)
+		if g.getType(key) == "string" {
+			fmt.Fprintln(g.out, ws+"    }")
+		}
 		fmt.Fprintln(g.out, ws+"    in.WantComma()")
 		fmt.Fprintln(g.out, ws+"  }")
 		fmt.Fprintln(g.out, ws+"  in.Delim('}')")
